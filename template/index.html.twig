@@ -1,0 +1,52 @@
+{% extends 'base/base.html.twig' %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-9 text-center">
+            <div class="status-message alert alert-info">
+                <span class="message pull-left">aa</span>
+                <button type="button" class="btn pull-right">
+                    Continue
+                </button>
+                <div class="clearfix"></div>
+            </div>
+            <table class="tic-tac-toe-table">
+                <tr>
+                    <td class="position p-0-0" data-x="0" data-y="0"></td>
+                    <td class="position p-1-0" data-x="1" data-y="0"></td>
+                    <td class="position p-2-0" data-x="2" data-y="0"></td>
+                </tr>
+                <tr>
+                    <td class="position p-0-1" data-x="0" data-y="1"></td>
+                    <td class="position p-1-1" data-x="1" data-y="1"></td>
+                    <td class="position p-2-1" data-x="2" data-y="1"></td>
+                </tr>
+                <tr>
+                    <td class="position p-0-2" data-x="0" data-y="2"></td>
+                    <td class="position p-1-2" data-x="1" data-y="2"></td>
+                    <td class="position p-2-2" data-x="2" data-y="2"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-3">
+            <h3>Rank</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <i class="glyphicon glyphicon-user"></i> You
+                        </th>
+                        <th>
+                            <i class="glyphicon glyphicon-cog"></i> Bot
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="user-points">0</td>
+                        <td class="bot-points">0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

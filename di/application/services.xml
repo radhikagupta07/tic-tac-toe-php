@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="app.move.validator" class="GSoares\TicTacToe\Application\Service\Move\Validator">
+        </service>
+        <service id="app.move.maker" class="GSoares\TicTacToe\Application\Service\Move\Maker">
+            <argument type="service" id="service.move.maker"/>
+            <argument type="service" id="service.board.winner_verifier"/>
+            <argument type="service" id="app.move.validator"/>
+        </service>
+    </services>
+</container>

@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <imports>
+        <import resource="application/controllers.xml" />
+        <import resource="application/factory.xml" />
+        <import resource="application/template.xml" />
+        <import resource="application/response.xml" />
+        <import resource="application/config.xml" />
+        <import resource="application/services.xml" />
+        <import resource="services.xml" />
+        <import resource="environment.xml" />
+    </imports>
+</container>

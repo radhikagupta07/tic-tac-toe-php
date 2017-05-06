@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+        http://symfony.com/schema/routing/routing-1.0.xsd">
+    <route id="index" path="/">
+        <default key="_controller">controller.index:indexAction</default>
+    </route>
+    <route id="move" path="/move">
+        <default key="_controller">controller.move:moveAction</default>
+    </route>
+    <route id="code_standards" path="/quality/code-standards">
+        <default key="_controller">controller.quality:codeStandardsAction</default>
+    </route>
+    <route id="mess_control" path="/quality/mess-control">
+        <default key="_controller">controller.quality:messControlAction</default>
+    </route>
+    <route id="doc" path="/quality/doc">
+        <default key="_controller">controller.quality:docAction</default>
+    </route>
+    <route id="test" path="/quality/test">
+        <default key="_controller">controller.quality:testAction</default>
+    </route>
+</routes>
