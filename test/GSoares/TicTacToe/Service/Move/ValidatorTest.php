@@ -29,7 +29,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \GSoares\TicTacToe\Exception\InvalidPlayerUnitException
      * @expectedExceptionMessage Invalid playerUnit. Allowed O or X
      * @test
      */
@@ -40,7 +40,7 @@ class ValidatorTest extends TestCase
 
     /**
      * @param array $boardState
-     * @expectedException \InvalidArgumentException
+     * @expectedException \GSoares\TicTacToe\Exception\InvalidBoardException
      * @expectedExceptionMessage You must provide a 3 lines board
      * @dataProvider invalidBoardLineCountProvider
      * @test
@@ -76,7 +76,7 @@ class ValidatorTest extends TestCase
     /**
      * @param $boardState
      * @dataProvider invalidBoardNumberOfPositionsProvider
-     * @expectedException \InvalidArgumentException
+     * @expectedException \GSoares\TicTacToe\Exception\InvalidBoardException
      * @expectedExceptionMessage You must provide a 3 positions line
      * @test
      */
@@ -111,7 +111,7 @@ class ValidatorTest extends TestCase
     /**
      * @param $boardState
      * @dataProvider invalidBoardPositionValueProvider
-     * @expectedException \InvalidArgumentException
+     * @expectedException \GSoares\TicTacToe\Exception\InvalidBoardException
      * @expectedExceptionMessage There is some invalid board position value
      * @test
      */
@@ -120,6 +120,9 @@ class ValidatorTest extends TestCase
         $this->validator->validate($boardState, 'X');
     }
 
+    /**
+     * @return array
+     */
     public function invalidBoardPositionValueProvider()
     {
         return [
@@ -143,7 +146,7 @@ class ValidatorTest extends TestCase
     /**
      * @param $boardState
      * @dataProvider invalidBoardUnitCountProvider
-     * @expectedException \InvalidArgumentException
+     * @expectedException \GSoares\TicTacToe\Exception\InvalidBoardException
      * @expectedExceptionMessage Invalid unit count equality
      * @test
      */
@@ -152,6 +155,9 @@ class ValidatorTest extends TestCase
         $this->validator->validate($boardState, 'X');
     }
 
+    /**
+     * @return array
+     */
     public function invalidBoardUnitCountProvider()
     {
         return [

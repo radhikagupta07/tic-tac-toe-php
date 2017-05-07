@@ -2,6 +2,7 @@
 
 namespace GSoares\TicTacToe\Application\Service\Move;
 
+use GSoares\TicTacToe\Exception\InvalidApiRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 
@@ -20,13 +21,11 @@ class Validator
         $data = json_decode((string) $request->getContent(false));
 
         if (json_last_error()) {
-            throw new \InvalidArgumentException(json_last_error_msg());
+            throw new InvalidApiRequestException(json_last_error_msg());
         }
 
         if (!isset($data->boardState) || !isset($data->playerUnit)) {
-            throw new \InvalidArgumentException(
-                "boardState and playerUnit must me provided"
-            );
+            throw new InvalidApiRequestException("boardState and playerUnit must me provided");
         }
 
         return $data;

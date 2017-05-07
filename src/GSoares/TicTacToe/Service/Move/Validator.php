@@ -2,6 +2,9 @@
 
 namespace GSoares\TicTacToe\Service\Move;
 
+use GSoares\TicTacToe\Exception\InvalidBoardException;
+use GSoares\TicTacToe\Exception\InvalidPlayerUnitException;
+
 /**
  * @author Gabriel Felipe Soares <gabrielfs7@gmail.com>
  */
@@ -17,7 +20,7 @@ class Validator
         $this->validatePlayerUnit($playerUnit);
 
         if (count($boardState) !== 3) {
-            throw new \InvalidArgumentException('You must provide a 3 lines board');
+            throw new InvalidBoardException('You must provide a 3 lines board');
         }
 
         $totalX = 0;
@@ -27,7 +30,7 @@ class Validator
             $boardState,
             function ($line) use (&$totalX, &$totalO) {
                 if (count($line) !== 3) {
-                    throw new \InvalidArgumentException('You must provide a 3 positions line');
+                    throw new InvalidBoardException('You must provide a 3 positions line');
                 }
 
                 foreach ($line as $positionValue) {
@@ -45,7 +48,7 @@ class Validator
         );
 
         if (abs($totalX - $totalO) > 1) {
-            throw new \InvalidArgumentException('Invalid unit count equality');
+            throw new InvalidBoardException('Invalid unit count equality');
         }
     }
 
@@ -55,7 +58,7 @@ class Validator
     private function validatePlayerUnit($playerUnit)
     {
         if (!is_string($playerUnit) || !in_array($playerUnit, ['X', 'O'])) {
-            throw new \InvalidArgumentException('Invalid playerUnit. Allowed O or X');
+            throw new InvalidPlayerUnitException('Invalid playerUnit. Allowed O or X');
         }
     }
 
@@ -65,7 +68,7 @@ class Validator
     private function validatePositionValue($positionValue)
     {
         if (!is_string($positionValue) || !in_array($positionValue, ['X', 'O', ''])) {
-            throw new \InvalidArgumentException('There is some invalid board position value');
+            throw new InvalidBoardException('There is some invalid board position value');
         }
     }
 }

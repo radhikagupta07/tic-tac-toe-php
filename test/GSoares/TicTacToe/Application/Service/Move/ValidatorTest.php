@@ -31,7 +31,7 @@ class ValidatorTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException \GSoares\TicTacToe\Exception\InvalidApiRequestException
      * @expectedMessage Syntax Error
      */
     public function testInvalidJsonMustThrowException()
@@ -41,7 +41,7 @@ class ValidatorTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException \GSoares\TicTacToe\Exception\InvalidApiRequestException
      * @expectedMessage boardState and playerUnit must me provided
      */
     public function testMissingRequiredJsonMustThrowException()
