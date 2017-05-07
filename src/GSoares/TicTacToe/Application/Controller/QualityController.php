@@ -17,7 +17,7 @@ class QualityController extends AbstractController
             'base/iframe.html.twig',
             [
                 'title' => 'Code Standard',
-                'url' => '/phpcs/index.php'
+                'url' => '/phpcs/summary.html'
             ]
         );
     }

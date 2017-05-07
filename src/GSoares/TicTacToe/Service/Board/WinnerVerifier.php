@@ -75,8 +75,7 @@ class WinnerVerifier
 
         array_walk(
             $playerPositions,
-            function ($option) use ($winnerPosition, &$commonPositions)
-            {
+            function ($option) use ($winnerPosition, &$commonPositions) {
                 if (in_array($option, $winnerPosition)) {
                     $commonPositions[] = $option;
                 }

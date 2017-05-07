@@ -24,7 +24,7 @@ class Validator
 
         array_walk(
             $boardState,
-            function($line) {
+            function ($line) {
                 if (count($line) !== 3) {
                     throw new \InvalidArgumentException('You must provide a 3 positions line');
                 }
