@@ -58,7 +58,7 @@ class ValidatorTest extends TestCase
             )
         );
     }
-    
+
     /**
      * @test
      */
