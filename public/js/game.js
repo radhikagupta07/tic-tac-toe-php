@@ -1,8 +1,21 @@
 $(
     function ()
     {
-        var playerUnit = 'X';
-        var botUnit = 'O';
+        /**
+         * @returns {string}
+         */
+        var getBotUnit = function ()
+        {
+            return $('.player-unit-selected').html() == 'X' ? 'O' : 'X';
+        }
+
+        /**
+         * @returns {string}
+         */
+        var getPlayerUnit = function ()
+        {
+            return $('.player-unit-selected').html();
+        }
 
         /**
          *
@@ -22,6 +35,7 @@ $(
             $('.position').removeClass('tied-game');
             $('.position').addClass('active');
             $('.status-message').fadeOut();
+            $('.player-unit').removeAttr('disabled');
         }
 
         /**
@@ -120,8 +134,8 @@ $(
                 xPosition = data.nextMove[0];
                 yPosition = data.nextMove[1];
 
-                markBoard(xPosition, yPosition, botUnit);
-                submitMove(xPosition, yPosition, botUnit, false);
+                markBoard(xPosition, yPosition, getBotUnit());
+                submitMove(xPosition, yPosition, getBotUnit(), false);
             }
 
             if (!isPlayerMove) {
@@ -138,7 +152,7 @@ $(
         var submitMove = function (xPosition, yPosition, unit, isPlayerMove)
         {
             var boardState = makeMove(xPosition, yPosition, unit);
-            var requestBody = { playerUnit : playerUnit, boardState : boardState };
+            var requestBody = { playerUnit : getPlayerUnit(), boardState : boardState };
 
             $.ajax(
                 {
@@ -173,7 +187,7 @@ $(
 
                 $('.position').removeClass('active');
 
-                submitMove(xPosition, yPosition, playerUnit, isPlayerMove);
+                submitMove(xPosition, yPosition, getPlayerUnit(), isPlayerMove);
             }
         );
 
@@ -184,6 +198,22 @@ $(
                 event.preventDefault();
 
                 resetBoard();
+            }
+        );
+
+        $('.player-unit').on(
+            'click',
+            function ()
+            {
+                var button = $(this);
+
+                $('.player-unit-selected').html(button.html());
+                $('.player-unit').removeClass('btn-success');
+                $('.player-unit').addClass('btn-default');
+                $('.player-unit').attr('disabled', 'disabled');
+
+                button.removeClass('btn-default');
+                button.addClass('btn-success');
             }
         );
     }

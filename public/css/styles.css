@@ -61,3 +61,8 @@ body {
 @keyframes blinker {
     50% { opacity: 0; }
 }
+
+.player-unit {
+    width: 100% !important;
+    font-size: 50px;
+}
