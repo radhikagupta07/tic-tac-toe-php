@@ -108,6 +108,7 @@ Response 200 OK
 Making a move that will cause a tie:
 
 ```
+POST http://tic-tac-toe-game/move
 {
   "playerUnit" : "X",
   "boardState" : 
