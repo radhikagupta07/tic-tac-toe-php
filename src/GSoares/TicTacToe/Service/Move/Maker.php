@@ -37,11 +37,10 @@ class Maker implements MoveInterface
      */
     public function makeMove($boardState, $playerUnit = 'X')
     {
-        $this->validator->validate($boardState, $playerUnit);
+        $this->validator
+            ->validate($boardState, $playerUnit);
 
-        $bot = $this->getBotByPlayer($playerUnit);
-
-        return $this->getNextPossibleMove($boardState, $bot);
+        return $this->getNextPossibleMove($boardState, $this->getBotByPlayer($playerUnit));
     }
 
     /**

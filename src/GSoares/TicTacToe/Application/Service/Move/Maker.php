@@ -48,23 +48,21 @@ class Maker
     public function makeMoveByRequest(Request $request)
     {
         try {
-            $data = $this->validator->validateMoveByRequest($request);
+            $requestData = $this->validator
+                ->validateMoveByRequest($request);
 
-            $winnerData = $this->winnerVerifier
-                ->verifyPosition($data->boardState, $data->playerUnit);
+            $boardState = (array) $requestData->boardState;
+            $playerUnit = $requestData->playerUnit;
 
-            $nextMovie = $this->maker
-                ->makeMove((array) $data->boardState, $data->playerUnit);
+            $winnerPosition = $this->winnerVerifier
+                ->verifyPosition($boardState, $playerUnit);
 
-            $responseDto = new \stdClass();
-            $responseDto->winner = isset($winnerData[3]) ? $winnerData[3] : null;
-            $responseDto->playerWins = $responseDto->winner == $data->playerUnit;
-            $responseDto->botWins = $responseDto->winner && $responseDto->winner != $data->playerUnit;
-            $responseDto->tiedGame = !$nextMovie && !$responseDto->winner;
-            $responseDto->winnerPositions = array_slice($winnerData, 0, 3);
-            $responseDto->nextMove = $nextMovie;
+            $nextMove = $this->maker
+                ->makeMove($boardState, $playerUnit);
 
-            return new JsonResponse($responseDto);
+            return new JsonResponse(
+                $this->fabricateResponse($winnerPosition, $nextMove, $playerUnit)
+            );
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
@@ -74,4 +72,24 @@ class Maker
             );
         }
     }
+
+    /**
+     * @param array $winnerPosition
+     * @param $nextMove
+     * @param $playerUnit
+     * @return \stdClass
+     */
+    private function fabricateResponse(array $winnerPosition, $nextMove, $playerUnit)
+    {
+        $responseDto = new \stdClass();
+        $responseDto->winner = isset($winnerPosition[3]) ? $winnerPosition[3] : null;
+        $responseDto->playerWins = $responseDto->winner == $playerUnit;
+        $responseDto->botWins = $responseDto->winner && $responseDto->winner != $playerUnit;
+        $responseDto->tiedGame = !$nextMove && !$responseDto->winner;
+        $responseDto->winnerPositions = array_slice($winnerPosition, 0, 3);
+        $responseDto->nextMove = $nextMove;
+
+        return $responseDto;
+    }
+
 }
