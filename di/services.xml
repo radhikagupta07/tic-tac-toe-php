@@ -7,6 +7,7 @@
         </service>
         <service id="service.move.maker" class="GSoares\TicTacToe\Service\Move\Maker">
             <argument type="service" id="service.move.validator"/>
+            <argument type="service" id="service.board.winner_verifier"/>
         </service>
         <service id="service.board.winner_verifier" class="GSoares\TicTacToe\Service\Board\WinnerVerifier">
             <argument type="service" id="service.move.validator"/>

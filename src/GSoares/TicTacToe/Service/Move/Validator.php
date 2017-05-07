@@ -12,6 +12,31 @@ class Validator
 {
 
     /**
+     * @var boolean
+     */
+    private $validateUnitCount = true;
+
+    /**
+     * @return $this
+     */
+    public function validateUnitCount()
+    {
+        $this->validateUnitCount = true;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function doNotValidateUnitCount()
+    {
+        $this->validateUnitCount = false;
+
+        return $this;
+    }
+
+    /**
      * @param array $boardState
      * @param $playerUnit
      */
@@ -47,8 +72,8 @@ class Validator
             }
         );
 
-        if (abs($totalX - $totalO) > 1) {
-            throw new InvalidBoardException('Invalid unit count equality');
+        if (abs($totalX - $totalO) > 1 && $this->validateUnitCount) {
+            throw new InvalidBoardException("Invalid unit count equality $totalX , $totalO " . abs($totalX - $totalO));
         }
     }
 

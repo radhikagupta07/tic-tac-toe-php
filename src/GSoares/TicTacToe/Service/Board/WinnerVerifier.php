@@ -21,6 +21,28 @@ class WinnerVerifier
     }
 
     /**
+     * @return $this
+     */
+    public function validateUnitCount()
+    {
+        $this->validator
+            ->validateUnitCount();
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function doNotValidateUnitCount()
+    {
+        $this->validator
+            ->doNotValidateUnitCount();
+
+        return $this;
+    }
+
+    /**
      * Returns the winner position if it exists.
      * Example: [[2, 0], [1,1], [0,2], 'O'] - Diagonal win by player 'O'
      *

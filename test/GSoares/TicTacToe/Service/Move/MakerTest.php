@@ -1,6 +1,7 @@
 <?php
 namespace GSoares\TicTacToe\Service\Move;
 
+use GSoares\TicTacToe\Service\Board\WinnerVerifier;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,12 +20,31 @@ class MakerTest extends TestCase
      */
     private $validator;
 
+    /**
+     * @var WinnerVerifier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $winnerVerifier;
+
     public function setUp()
     {
         $this->validator = $this->getMockBuilder('GSoares\TicTacToe\Service\Move\Validator')
             ->getMock();
 
-        $this->maker = new Maker($this->validator);
+        $this->winnerVerifier = $this->getMockBuilder('GSoares\TicTacToe\Service\Board\WinnerVerifier')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->maker = new Maker($this->validator, $this->winnerVerifier);
+
+        $this->winnerVerifier
+            ->expects($this->any())
+            ->method('doNotValidateUnitCount')
+            ->willReturnSelf();
+
+        $this->winnerVerifier
+            ->expects($this->any())
+            ->method('validateUnitCount')
+            ->willReturnSelf();
 
         $this->validator
             ->expects($this->once())
@@ -38,6 +58,7 @@ class MakerTest extends TestCase
     {
         $this->maker = null;
         $this->validator = null;
+        $this->winnerVerifier = null;
 
         parent::tearDown();
     }
@@ -51,11 +72,20 @@ class MakerTest extends TestCase
      */
     public function testMakeMoveWillReturnValidNextPosition($player, array $boardState, array $expectedPositions)
     {
-        $nextMove = $this->maker->makeMove($boardState, $player);
+        $this->winnerVerifier
+            ->expects($this->any())
+            ->method('verifyPosition')
+            ->willReturn([]);
+
+        $nextMove = $this->maker
+            ->makeMove($boardState, $player);
 
         $this->assertContains($nextMove, $expectedPositions);
     }
 
+    /**
+     * @return array
+     */
     public function validNextMovePositionsProvider()
     {
         return [
@@ -72,7 +102,6 @@ class MakerTest extends TestCase
                 [
                     [2, 0, 'O'],
                 ]
-
             ],
             [
                 # player
@@ -93,5 +122,147 @@ class MakerTest extends TestCase
 
             ]
         ];
+    }
+
+    /**
+     * @param $player
+     * @param $bot
+     * @param array $boardState
+     * @param array $expectedPositions
+     * @dataProvider botMoveWillPredictWinnerMoveProvider
+     * @test
+     */
+    public function testBotMoveWillPredictWinnerMove($player, $bot, array $boardState, array $expectedPositions)
+    {
+        $this->winnerVerifier
+            ->expects($this->atLeast(1))
+            ->method('verifyPosition')
+            ->willReturnCallback($this->simulateWinnerPositionVerifier($bot, $expectedPositions));
+
+        $nextMove = $this->maker
+            ->makeMove($boardState, $player);
+
+        $this->assertContains($nextMove, $expectedPositions);
+    }
+
+    /**
+     * @return array
+     */
+    public function botMoveWillPredictWinnerMoveProvider()
+    {
+        return [
+            [
+                # player
+                'X',
+                # bot
+                'O',
+                # board state
+                [
+                    ['X', 'O', ''],
+                    ['X', '', ''],
+                    ['',  '', ''],
+                ],
+                # Possible next positions
+                [
+                    [0, 2],
+                ]
+            ],
+            [
+                # player
+                'X',
+                # bot
+                'O',
+                # board state
+                [
+                    ['X', 'O', ''],
+                    ['X', 'O', ''],
+                    ['',  '', ''],
+                ],
+                # Possible next positions
+                [
+                    [1, 2],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param $player
+     * @param array $boardState
+     * @param array $expectedPositions
+     * @dataProvider playerMoveWillPredictWinnerMoveProvider
+     * @test
+     */
+    public function testPlayerMoveWillPredictWinnerMove($player, array $boardState, array $expectedPositions)
+    {
+        $this->winnerVerifier
+            ->expects($this->atLeast(1))
+            ->method('verifyPosition')
+            ->willReturnCallback($this->simulateWinnerPositionVerifier($player, $expectedPositions));
+
+        $nextMove = $this->maker
+            ->makeMove($boardState, $player);
+
+        $this->assertContains($nextMove, $expectedPositions);
+    }
+
+    /**
+     * @return array
+     */
+    public function playerMoveWillPredictWinnerMoveProvider()
+    {
+        return [
+            [
+                # player
+                'X',
+                # board state
+                [
+                    ['X', 'O', ''],
+                    ['X', '', ''],
+                    ['',  '', ''],
+                ],
+                # Possible next positions
+                [
+                    [0, 2],
+                ]
+            ],
+            [
+                # player
+                'X',
+                # board state
+                [
+                    ['X', 'O', ''],
+                    ['X', 'O', ''],
+                    ['',  '', ''],
+                ],
+                # Possible next positions
+                [
+                    [1, 2],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param $referenceUnit
+     * @param array $expectedPositions
+     * @return callable
+     */
+    private function simulateWinnerPositionVerifier($referenceUnit, array $expectedPositions)
+    {
+        return function ($simulatedBoardState, $unit) use ($referenceUnit, $expectedPositions) {
+            if ($unit == $referenceUnit) {
+                foreach ($expectedPositions as $expectedPosition) {
+                    $positionX = $expectedPosition[0];
+                    $positionY = $expectedPosition[1];
+
+                    if (!empty($simulatedBoardState[$positionY][$positionX])) {
+                        return current($expectedPositions);
+                    }
+                }
+            }
+
+            return [];
+        };
     }
 }
