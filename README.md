@@ -160,3 +160,9 @@ Running Mess Detection (Empty means no error)
 ```
 bin/generate-md.sh
 ```
+
+Generate PHPDoc
+
+```
+bin/generate-doc.sh
+```

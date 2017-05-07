@@ -1,2 +1,2 @@
 #!/bin/bash
-bin/phpdoc -d src/ -t public/phpdoc -p
+bin/phpdoc -d src/GSoares/TicTacToe/Application/Service/Move,src/GSoares/TicTacToe/Service -t public/phpdoc -p

@@ -186,6 +186,7 @@ $(
                 }
 
                 $('.position').removeClass('active');
+                $('.player-unit').attr('disabled', 'disabled');
 
                 submitMove(xPosition, yPosition, getPlayerUnit(), isPlayerMove);
             }

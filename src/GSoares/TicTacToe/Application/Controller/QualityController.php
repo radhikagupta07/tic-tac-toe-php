@@ -42,7 +42,7 @@ class QualityController extends AbstractController
     public function docAction()
     {
         return $this->renderResponse(
-            'base/iframe.html.twig',
+            'base/fullpage-iframe.html.twig',
             [
                 'title' => 'Documentation',
                 'url' => '/phpdoc/index.html'
