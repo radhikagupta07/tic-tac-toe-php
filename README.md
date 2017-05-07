@@ -2,6 +2,8 @@
 
 A Tic Tac Toe game written in PHP
 
+![Screenshot](screenshot.png)
+
 # Requirements
 
 - PHP >=7.1.0
