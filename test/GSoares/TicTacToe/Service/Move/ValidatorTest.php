@@ -29,36 +29,153 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @param $boardState
-     * @dataProvider invalidBoardStateProvider
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid playerUnit. Allowed O or X
      * @test
      */
-    public function testInvalidBoardStateMustThrowException(array $boardState)
+    public function testInvalidPlayerUnitMustThrowException()
+    {
+        $this->validator->validate([], 'Z');
+    }
+
+    /**
+     * @param array $boardState
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage You must provide a 3 lines board
+     * @dataProvider invalidBoardLineCountProvider
+     * @test
+     */
+    public function testInvalidBoardLineCountMustThrowException(array $boardState)
     {
         $this->validator->validate($boardState, 'X');
     }
 
-    public function invalidBoardStateProvider()
+    /**
+     * @return array
+     */
+    public function invalidBoardLineCountProvider()
     {
         return [
             [
-                ['X', 'O', null],
-                ['X', 'O', 'O'],
-                ['O',  'X', 'X'],
+                [
+                    ['X', 'O', ''],
+                    ['X', 'O', 'O']
+                ]
             ],
             [
-                ['X', 'O', ''],
-                ['X', 'O', 'O'],
-                ['O',  'X', new \stdClass()],
+                [
+                    ['X', 'O', ''],
+                    ['X', 'O', 'O'],
+                    ['X', 'O', ''],
+                    ['X', 'O', 'O']
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param $boardState
+     * @dataProvider invalidBoardNumberOfPositionsProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage You must provide a 3 positions line
+     * @test
+     */
+    public function testInvalidBoardNumberOfPositionsMustThrowException(array $boardState)
+    {
+        $this->validator->validate($boardState, 'X');
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidBoardNumberOfPositionsProvider()
+    {
+        return [
+            [
+                [
+                    ['X', 'O', ''],
+                    ['X', 'O', 'O'],
+                    ['O',  'X']
+                ]
             ],
             [
-                ['X', 'O', ''],
-                ['X', 'O', 'O'],
-                ['O',  'X'],
+                [
+                    ['X', 'O', ''],
+                    ['X', 'O', 'O'],
+                    ['O',  'X', 'O', 'X']
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param $boardState
+     * @dataProvider invalidBoardPositionValueProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage There is some invalid board position value
+     * @test
+     */
+    public function testInvalidBoardPositionValueMustThrowException(array $boardState)
+    {
+        $this->validator->validate($boardState, 'X');
+    }
+
+    public function invalidBoardPositionValueProvider()
+    {
+        return [
+            [
+                [
+                    ['X', 'O', null],
+                    ['X', 'O', 'O'],
+                    ['O',  'X', 'X']
+                ]
             ],
-            [[]],
-            [[null]],
+            [
+                [
+                    ['X', 'O', ''],
+                    ['X', 'O', 'O'],
+                    ['O',  'X', new \stdClass()]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param $boardState
+     * @dataProvider invalidBoardUnitCountProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid unit count equality
+     * @test
+     */
+    public function testInvalidBoardUnitCountMustThrowException(array $boardState)
+    {
+        $this->validator->validate($boardState, 'X');
+    }
+
+    public function invalidBoardUnitCountProvider()
+    {
+        return [
+            [
+                [
+                    ['O', 'O', 'O'],
+                    ['O', 'X', 'O'],
+                    ['O',  'O', 'X']
+                ]
+            ],
+            [
+                [
+                    ['', '', ''],
+                    ['', 'X', 'O'],
+                    ['',  'X', 'X']
+                ]
+            ],
+            [
+                [
+                    ['', '', ''],
+                    ['', 'O', 'O'],
+                    ['',  '', '']
+                ]
+            ],
         ];
     }
 }
