@@ -2,7 +2,12 @@
 
 A Tic Tac Toe game written in PHP
 
-# Instructions
+# Requirements
+
+- PHP >=7.1.0
+- WebServer with rewrite mode activated (I provide a sample NGinx configuration file `tic-tac-toe.conf`.
+
+# Installation Instructions
 
 ### 1. Install the package using composer
 
