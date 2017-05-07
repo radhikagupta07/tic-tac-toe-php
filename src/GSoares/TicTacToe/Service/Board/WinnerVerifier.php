@@ -30,34 +30,60 @@ class WinnerVerifier
      */
     public function verifyPosition(array $boardState, $playerUnit)
     {
-        $this->validator->validate($boardState, $playerUnit);
+        $this->validator
+            ->validate($boardState, $playerUnit);
 
         $winnerPositions = $this->getWinnerPositions();
-
         $playersPositions = $this->groupPlayerPositions($boardState);
 
         foreach ($winnerPositions as $winnerPosition) {
-            foreach ($playersPositions as $unit => $positions) {
-                $commonPositions = [];
-
-                foreach ($winnerPosition as $winnerSubPosition) {
-                    foreach ($positions as $position) {
-                        if ($position == $winnerSubPosition) {
-                            $commonPositions[] = $winnerSubPosition;
-                        }
-                    }
-                }
-
-                sort($winnerPosition);
-                sort($commonPositions);
-
-                if ($winnerPosition == $commonPositions) {
-                    return array_merge($winnerPosition, [$unit]);
-                }
+            if ($playerWinnerPosition = $this->handlePlayerPosition($playersPositions, $winnerPosition)) {
+                return $playerWinnerPosition;
             }
         }
 
         return [];
+    }
+
+    /**
+     * @param array $playersPositions
+     * @param array $winnerPosition
+     * @return array
+     */
+    private function handlePlayerPosition(array $playersPositions, array $winnerPosition)
+    {
+        foreach ($playersPositions as $playerUnit => $positions) {
+            $commonPositions = $this->getCommonWinnerPositions($winnerPosition, $positions);
+
+            sort($winnerPosition);
+            sort($commonPositions);
+
+            if ($winnerPosition == $commonPositions) {
+                return array_merge($winnerPosition, [$playerUnit]);
+            }
+        }
+    }
+
+    /**
+     * @param array $winnerPosition
+     * @param $playerPositions
+     * @return array
+     */
+    private function getCommonWinnerPositions(array $winnerPosition, $playerPositions)
+    {
+        $commonPositions = [];
+
+        array_walk(
+            $playerPositions,
+            function ($option) use ($winnerPosition, &$commonPositions)
+            {
+                if (in_array($option, $winnerPosition)) {
+                    $commonPositions[] = $option;
+                }
+            }
+        );
+
+        return $commonPositions;
     }
 
     /**
@@ -66,7 +92,10 @@ class WinnerVerifier
      */
     private function groupPlayerPositions(array $boardState)
     {
-        $playersPositions = ['X' => [], 'O' => []];
+        $playersPositions = [
+            'X' => [],
+            'O' => []
+        ];
 
         foreach ($boardState as $yPosition => $line) {
             foreach ($line as $xPosition => $value) {

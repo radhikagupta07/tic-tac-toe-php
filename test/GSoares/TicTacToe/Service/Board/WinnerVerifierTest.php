@@ -50,12 +50,12 @@ class WinnerVerifierTest extends TestCase
      * @dataProvider winnerBoardsProvider
      * @test
      */
-    public function verifyWinnerPosition($player, array $boardState, array $expectedWinnerPositions)
+    public function testVerifyWinnerPosition($player, array $boardState, array $expectedWinnerPositions)
     {
         $winnerPositions = $this->winnerVerifier
             ->verifyPosition($boardState, $player);
 
-        $this->assertEquals($winnerPositions, $expectedWinnerPositions);
+        $this->assertEquals($expectedWinnerPositions, $winnerPositions);
     }
 
     /**
@@ -71,7 +71,7 @@ class WinnerVerifierTest extends TestCase
                 [
                     ['X', 'O', 'O'],
                     ['X', 'O', 'O'],
-                    ['O',  'X', 'X'],
+                    ['O', 'X', 'X'],
                 ],
                 # Winner positions
                 [
@@ -88,7 +88,7 @@ class WinnerVerifierTest extends TestCase
                 [
                     ['O', 'X', 'O'],
                     ['X', 'O', 'O'],
-                    ['X',  'X', 'X'],
+                    ['X', 'X', 'X'],
                 ],
                 # Winner positions
                 [
@@ -105,7 +105,7 @@ class WinnerVerifierTest extends TestCase
                 [
                     ['O', '', ''],
                     ['', 'O', ''],
-                    ['X',  'X', 'X'],
+                    ['X', 'X', 'X'],
                 ],
                 # Winner positions
                 [
@@ -122,7 +122,7 @@ class WinnerVerifierTest extends TestCase
                 [
                     ['O', 'X', 'O'],
                     ['X', 'X', 'O'],
-                    ['O',  'X', 'X'],
+                    ['O', 'X', 'X'],
                 ],
                 # Winner positions
                 [
@@ -130,6 +130,52 @@ class WinnerVerifierTest extends TestCase
                     [1, 1],
                     [1, 2],
                     'X'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param array $boardState
+     * @dataProvider noWinnersBoardsProvider
+     * @test
+     */
+    public function testNoWinnerBoards(array $boardState)
+    {
+        $winnerPositions = $this->winnerVerifier
+            ->verifyPosition($boardState, 'X');
+
+        $this->assertEquals([], $winnerPositions);
+    }
+
+    /**
+     * @return array
+     */
+    public function noWinnersBoardsProvider()
+    {
+        return [
+            # board state
+            [
+                [
+                    ['X', 'O', 'X'],
+                    ['X', 'O', 'O'],
+                    ['O', 'X', 'X']
+                ]
+            ],
+            # board state
+            [
+                [
+                    ['', '', ''],
+                    ['', '', ''],
+                    ['', '', '']
+                ]
+            ],
+            # board state
+            [
+                [
+                    ['X', 'O', 'X'],
+                    ['', '', 'O'],
+                    ['O', 'X', '']
                 ]
             ]
         ];
