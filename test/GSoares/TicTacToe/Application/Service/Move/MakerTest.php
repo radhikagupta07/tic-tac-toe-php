@@ -1,6 +1,7 @@
 <?php
 namespace GSoares\TicTacToe\Application\Service\Move;
 
+use GSoares\TicTacToe\Application\Dto\GameResultDto;
 use GSoares\TicTacToe\Service\Board\WinnerVerifier;
 use GSoares\TicTacToe\Service\Move\Maker as MakerService;
 use PHPUnit\Framework\TestCase;
@@ -83,15 +84,9 @@ class MakerTest extends TestCase
             ->with([], 'X')
             ->willReturn([]);
 
-        $request = Request::create('', 'POST');
+        $expectedResponse = $this->fabricateResponse(null, false, false, true, [], []);
 
-        $response = $this->maker->makeMoveByRequest($request);
-
-        $expectedResponse = new JsonResponse(
-            $this->fabricateResponse(null, false, false, true, [], [])
-        );
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertEquals($expectedResponse, $this->makeMoveByRequest());
     }
 
     /**
@@ -118,15 +113,9 @@ class MakerTest extends TestCase
             ->with([], 'X')
             ->willReturn([]);
 
-        $request = Request::create('', 'POST');
+        $expectedResponse = $this->fabricateResponse('O', false, true, false, $winnerPositions, []);
 
-        $response = $this->maker->makeMoveByRequest($request);
-
-        $expectedResponse = new JsonResponse(
-            $this->fabricateResponse('O', false, true, false, $winnerPositions, [])
-        );
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertEquals($expectedResponse, $this->makeMoveByRequest());
     }
 
     /**
@@ -153,15 +142,49 @@ class MakerTest extends TestCase
             ->with([], 'X')
             ->willReturn([]);
 
-        $request = Request::create('', 'POST');
+        $expectedResponse = $this->fabricateResponse('X', true, false, false, $winnerPositions, []);
 
-        $response = $this->maker->makeMoveByRequest($request);
+        $this->assertEquals($expectedResponse, $this->makeMoveByRequest());
+    }
 
-        $expectedResponse = new JsonResponse(
-            $this->fabricateResponse('X', true, false, false, $winnerPositions, [])
-        );
+    /**
+     * @test
+     */
+    public function testNoWinnerMove()
+    {
+        $this->validator
+            ->expects($this->once())
+            ->method('validateMoveByRequest')
+            ->willReturn($this->createRequestObject());
 
-        $this->assertEquals($expectedResponse, $response);
+        $this->winnerVerifier
+            ->expects($this->once())
+            ->method('verifyPosition')
+            ->with([], 'X')
+            ->willReturn([]);
+
+        $this->makerService
+            ->expects($this->once())
+            ->method('makeMove')
+            ->with([], 'X')
+            ->willReturn($nextMove = [0, 0, 'O']);
+
+        $expectedResponse = $this->fabricateResponse(null, false, false, false, [], $nextMove);
+
+        $this->assertEquals($expectedResponse, $this->makeMoveByRequest());
+    }
+
+    /**
+     * @test
+     */
+    public function testInvalidBoardWillReturn400Response()
+    {
+        $this->validator
+            ->expects($this->once())
+            ->method('validateMoveByRequest')
+            ->willThrowException(new \Exception('Error'));
+
+        $this->assertEquals(new JsonResponse(['error' => 'Error'], 400), $this->makeMoveByRequest());
     }
 
     /**
@@ -177,17 +200,25 @@ class MakerTest extends TestCase
     }
 
     /**
+     * @return JsonResponse
+     */
+    private function makeMoveByRequest()
+    {
+        return $this->maker->makeMoveByRequest(new Request());
+    }
+
+    /**
      * @param $winner
      * @param $playerWins
      * @param $botWins
      * @param $tieGame
      * @param $winnerPositions
      * @param $nextMove
-     * @return \stdClass
+     * @return JsonResponse
      */
     private function fabricateResponse($winner, $playerWins, $botWins, $tieGame, $winnerPositions, $nextMove)
     {
-        $responseDto = new \stdClass();
+        $responseDto = new GameResultDto();
         $responseDto->winner = $winner;
         $responseDto->playerWins = $playerWins;
         $responseDto->botWins = $botWins;
@@ -195,6 +226,6 @@ class MakerTest extends TestCase
         $responseDto->winnerPositions = $winnerPositions;
         $responseDto->nextMove = $nextMove;
 
-        return $responseDto;
+        return new JsonResponse($responseDto);
     }
 }

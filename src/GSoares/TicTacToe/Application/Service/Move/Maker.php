@@ -2,6 +2,7 @@
 
 namespace GSoares\TicTacToe\Application\Service\Move;
 
+use GSoares\TicTacToe\Application\Dto\GameResultDto;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
@@ -61,7 +62,7 @@ class Maker
                 ->makeMove($boardState, $playerUnit);
 
             return new JsonResponse(
-                $this->fabricateResponse($winnerPosition, $nextMove, $playerUnit)
+                $this->fabricateGameResult($winnerPosition, $nextMove, $playerUnit)
             );
         } catch (\Exception $e) {
             return new JsonResponse(
@@ -79,9 +80,9 @@ class Maker
      * @param $playerUnit
      * @return \stdClass
      */
-    private function fabricateResponse(array $winnerPosition, $nextMove, $playerUnit)
+    private function fabricateGameResult(array $winnerPosition, $nextMove, $playerUnit)
     {
-        $responseDto = new \stdClass();
+        $responseDto = new GameResultDto();
         $responseDto->winner = isset($winnerPosition[3]) ? $winnerPosition[3] : null;
         $responseDto->playerWins = $responseDto->winner == $playerUnit;
         $responseDto->botWins = $responseDto->winner && $responseDto->winner != $playerUnit;

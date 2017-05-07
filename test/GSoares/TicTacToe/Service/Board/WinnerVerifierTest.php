@@ -50,8 +50,11 @@ class WinnerVerifierTest extends TestCase
      * @dataProvider winnerBoardsProvider
      * @test
      */
-    public function testVerifyWinnerPosition($player, array $boardState, array $expectedWinnerPositions)
-    {
+    public function testWinnerBoardWillReturnCorrectPosition(
+        $player,
+        array $boardState,
+        array $expectedWinnerPositions
+    ) {
         $winnerPositions = $this->winnerVerifier
             ->verifyPosition($boardState, $player);
 
@@ -140,7 +143,7 @@ class WinnerVerifierTest extends TestCase
      * @dataProvider noWinnersBoardsProvider
      * @test
      */
-    public function testNoWinnerBoards(array $boardState)
+    public function testNoWinnerBoardWillReturnEmptyArray(array $boardState)
     {
         $winnerPositions = $this->winnerVerifier
             ->verifyPosition($boardState, 'X');
