@@ -20,6 +20,7 @@ $(
             $('.position').html('');
             $('.position').removeClass('winner-game');
             $('.position').removeClass('tied-game');
+            $('.position').addClass('active');
             $('.status-message').fadeOut();
         }
 
@@ -85,6 +86,50 @@ $(
         };
 
         /**
+         * @param data
+         * @param isPlayerMove
+         */
+        var handleMoveResponse = function (data, xPosition, yPosition, isPlayerMove)
+        {
+            var hasNextMove = data.nextMove !== null && typeof data.nextMove == 'object';
+            var hasWinner = data.winnerPositions !== null && typeof data.winnerPositions == "object";
+
+            if (hasWinner) {
+                handleWinnerPositions(data.winnerPositions);
+            }
+
+            if (data.tiedGame) {
+                $('.position').addClass('tied-game');
+
+                return showMessage('Tied game! :|');
+            }
+
+            if (data.playerWins) {
+                incrementPoints('.user-points');
+
+                return showMessage('Player wins! :)');
+            }
+
+            if (data.botWins) {
+                incrementPoints('.bot-points');
+
+                return showMessage('Bot wins! :(');
+            }
+
+            if (isPlayerMove && hasNextMove) {
+                xPosition = data.nextMove[0];
+                yPosition = data.nextMove[1];
+
+                markBoard(xPosition, yPosition, botUnit);
+                submitMove(xPosition, yPosition, botUnit, false);
+            }
+
+            if (!isPlayerMove) {
+                $('.position').addClass('active');
+            }
+        };
+
+        /**
          * @param xPosition
          * @param yPosition
          * @param unit
@@ -105,37 +150,7 @@ $(
             ).done(
                 function(data)
                 {
-                    if (data.winnerPositions !== null && typeof data.winnerPositions == "object") {
-                        handleWinnerPositions(data.winnerPositions);
-                    }
-
-                    if (data.tiedGame) {
-                        $('.position').addClass('tied-game');
-
-                        return showMessage('Tied game! :|');
-                    }
-
-                    if (data.playerWins) {
-                        incrementPoints('.user-points');
-
-                        return showMessage('Player wins! :)');
-                    }
-
-                    if (data.botWins) {
-                        incrementPoints('.bot-points');
-
-                        return showMessage('Bot wins! :(');
-                    }
-
-                    if (isPlayerMove &&
-                        data.nextMove !== null &&
-                        typeof data.nextMove == 'object') {
-                        xPosition = data.nextMove[0];
-                        yPosition = data.nextMove[1];
-
-                        markBoard(xPosition, yPosition, botUnit);
-                        submitMove(xPosition, yPosition, botUnit, false);
-                    }
+                    handleMoveResponse(data, xPosition, yPosition, isPlayerMove);
                 }
             );
         };
@@ -150,10 +165,13 @@ $(
                 var xPosition = button.data('x');
                 var yPosition = button.data('y');
                 var isPlayerMove = true;
+                var isInactive = !button.is('.active');
 
-                if (button.html().length > 0) {
+                if (button.html().length > 0 || isInactive) {
                     return;
                 }
+
+                $('.position').removeClass('active');
 
                 submitMove(xPosition, yPosition, playerUnit, isPlayerMove);
             }
