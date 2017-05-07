@@ -32,8 +32,85 @@ class WinnerVerifier
     {
         $this->validator->validate($boardState, $playerUnit);
 
-        return [];
+        $winnerPositions = $this->getWinnerPositions();
 
-        //FIXME return [[2, 0], [1,1], [0,2], 'O']; //FIXME TODO mocked and incomplete
+        $playersPositions = $this->groupPlayerPositions($boardState);
+
+        foreach ($winnerPositions as $winnerPosition) {
+            foreach ($playersPositions as $unit => $positions) {
+                $commonPositions = [];
+
+                foreach ($winnerPosition as $winnerSubPosition) {
+                    foreach ($positions as $position) {
+                        if ($position == $winnerSubPosition) {
+                            $commonPositions[] = $winnerSubPosition;
+                        }
+                    }
+                }
+
+                sort($winnerPosition);
+                sort($commonPositions);
+
+                if ($winnerPosition == $commonPositions) {
+                    return array_merge($winnerPosition, [$unit]);
+                }
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * @param array $boardState
+     * @return array
+     */
+    private function groupPlayerPositions(array $boardState)
+    {
+        $playersPositions = ['X' => [], 'O' => []];
+
+        foreach ($boardState as $yPosition => $line) {
+            foreach ($line as $xPosition => $value) {
+                if (!empty($value)) {
+                    $playersPositions[$value][] = [$xPosition, $yPosition];
+                }
+            }
+        }
+
+        return $playersPositions;
+    }
+
+    /**
+     * @return array
+     */
+    private function getWinnerPositions()
+    {
+        $winnerPositions = [
+            [
+                [2, 0],
+                [1, 1],
+                [0, 2]
+            ],
+            [
+                [0, 0],
+                [1, 1],
+                [2, 2]
+            ]
+        ];
+
+        for ($row = 0; $row < 3; $row++) {
+            $winnerPositions[] = [
+                [$row, 0],
+                [$row, 1],
+                [$row, 2]
+            ];
+
+            $winnerPositions[] = [
+                [0, $row],
+                [1, $row],
+                [2, $row]
+            ];
+        }
+
+        return $winnerPositions;
     }
 }

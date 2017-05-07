@@ -3,7 +3,8 @@ body {
 }
 
 .status-message {
-    display: none;    
+    display: none;
+    font-size: 20px !important;
 }
 
 .tic-tac-toe-table {
@@ -54,8 +55,7 @@ body {
 }
 
 .tied-game {
-    background: #aaaaaa !important;
-    animation: blinker 1s linear infinite;
+    background: #ebccd1 !important;
 }
 
 @keyframes blinker {

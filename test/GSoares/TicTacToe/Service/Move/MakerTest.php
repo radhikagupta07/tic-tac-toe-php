@@ -37,6 +37,7 @@ class MakerTest extends TestCase
     public function tearDown()
     {
         $this->maker = null;
+        $this->validator = null;
 
         parent::tearDown();
     }

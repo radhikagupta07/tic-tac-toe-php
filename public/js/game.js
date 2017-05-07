@@ -1,8 +1,8 @@
 $(
     function ()
     {
-        var playerUnit = 'O';
-        var botUnit = 'X';
+        var playerUnit = 'X';
+        var botUnit = 'O';
 
         /**
          *
@@ -123,8 +123,6 @@ $(
 
                     if (data.botWins) {
                         incrementPoints('.bot-points');
-
-                        $('.bot-points').html(botPoints + 1);
 
                         return showMessage('Bot wins! :(');
                     }
