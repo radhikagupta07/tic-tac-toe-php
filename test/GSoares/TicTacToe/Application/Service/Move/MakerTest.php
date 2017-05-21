@@ -34,7 +34,7 @@ class MakerTest extends TestCase
      */
     private $winnerVerifier;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->validator = $this->getMockBuilder('GSoares\TicTacToe\Application\Service\Move\Validator')
             ->getMock();
@@ -52,7 +52,7 @@ class MakerTest extends TestCase
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->maker = null;
         $this->validator = null;
@@ -65,7 +65,7 @@ class MakerTest extends TestCase
     /**
      * @test
      */
-    public function testTieMove()
+    public function testTieMove() : void
     {
         $this->validator
             ->expects($this->once())
@@ -99,7 +99,7 @@ class MakerTest extends TestCase
     /**
      * @test
      */
-    public function testBotMoveWins()
+    public function testBotMoveWins() : void
     {
         $winnerPositions = [[2, 0], [1,1], [0,2]];
 
@@ -135,7 +135,7 @@ class MakerTest extends TestCase
     /**
      * @test
      */
-    public function testPlayerMoveWins()
+    public function testPlayerMoveWins() : void
     {
         $winnerPositions = [[2, 0], [1,1], [0,2]];
 
@@ -171,7 +171,7 @@ class MakerTest extends TestCase
     /**
      * @test
      */
-    public function testNoWinnerMove()
+    public function testNoWinnerMove() : void
     {
         $this->validator
             ->expects($this->once())
@@ -205,7 +205,7 @@ class MakerTest extends TestCase
     /**
      * @test
      */
-    public function testInvalidBoardWillReturn400Response()
+    public function testInvalidBoardWillReturn400Response() : void
     {
         $this->validator
             ->expects($this->once())

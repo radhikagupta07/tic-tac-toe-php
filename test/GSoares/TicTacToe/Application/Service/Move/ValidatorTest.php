@@ -15,14 +15,14 @@ class ValidatorTest extends TestCase
      */
     private $validator;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->validator = new Validator();
 
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->validator = null;
 
@@ -34,7 +34,7 @@ class ValidatorTest extends TestCase
      * @expectedException \GSoares\TicTacToe\Exception\InvalidApiRequestException
      * @expectedMessage Syntax Error
      */
-    public function testInvalidJsonMustThrowException()
+    public function testInvalidJsonMustThrowException() : void
     {
         $this->validator->validateMoveByRequest(new Request());
     }
@@ -44,7 +44,7 @@ class ValidatorTest extends TestCase
      * @expectedException \GSoares\TicTacToe\Exception\InvalidApiRequestException
      * @expectedMessage boardState and playerUnit must me provided
      */
-    public function testMissingRequiredJsonMustThrowException()
+    public function testMissingRequiredJsonMustThrowException() : void
     {
         $this->validator->validateMoveByRequest(
             new Request(
@@ -62,7 +62,7 @@ class ValidatorTest extends TestCase
     /**
      * @test
      */
-    public function testReturnDtoIfIsAValidJson()
+    public function testReturnDtoIfIsAValidJson() : void
     {
         $expectedDto = new \stdClass();
         $expectedDto->boardState = [];

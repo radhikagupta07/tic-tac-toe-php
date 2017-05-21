@@ -17,9 +17,9 @@ class Validator
     private $validateUnitCount = true;
 
     /**
-     * @return $this
+     * @return Validator
      */
-    public function validateUnitCount()
+    public function validateUnitCount() : self
     {
         $this->validateUnitCount = true;
 
@@ -27,9 +27,9 @@ class Validator
     }
 
     /**
-     * @return $this
+     * @return Validator
      */
-    public function doNotValidateUnitCount()
+    public function doNotValidateUnitCount() : self
     {
         $this->validateUnitCount = false;
 
@@ -38,9 +38,9 @@ class Validator
 
     /**
      * @param array $boardState
-     * @param $playerUnit
+     * @param string $playerUnit
      */
-    public function validate(array $boardState, $playerUnit)
+    public function validate(array $boardState, string $playerUnit) : void
     {
         $this->validatePlayerUnit($playerUnit);
 
@@ -73,14 +73,16 @@ class Validator
         );
 
         if (abs($totalX - $totalO) > 1 && $this->validateUnitCount) {
-            throw new InvalidBoardException("Invalid unit count equality $totalX , $totalO " . abs($totalX - $totalO));
+            throw new InvalidBoardException(
+                "Invalid unit count equality $totalX , $totalO " . abs($totalX - $totalO)
+            );
         }
     }
 
     /**
-     * @param $playerUnit
+     * @param string $playerUnit
      */
-    private function validatePlayerUnit($playerUnit)
+    private function validatePlayerUnit(string $playerUnit) : void
     {
         if (!is_string($playerUnit) || !in_array($playerUnit, ['X', 'O'])) {
             throw new InvalidPlayerUnitException('Invalid playerUnit. Allowed O or X');
@@ -88,9 +90,9 @@ class Validator
     }
 
     /**
-     * @param $positionValue
+     * @param string $positionValue
      */
-    private function validatePositionValue($positionValue)
+    private function validatePositionValue(string $positionValue) : void
     {
         if (!is_string($positionValue) || !in_array($positionValue, ['X', 'O', ''])) {
             throw new InvalidBoardException('There is some invalid board position value');

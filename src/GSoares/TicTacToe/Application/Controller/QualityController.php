@@ -2,6 +2,8 @@
 
 namespace GSoares\TicTacToe\Application\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * @author Gabriel Felipe Soares <gabrielfs7@gmail.com>
  */
@@ -11,7 +13,7 @@ class QualityController extends AbstractController
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function codeStandardsAction()
+    public function codeStandardsAction() : Response
     {
         return $this->renderResponse(
             'base/iframe.html.twig',
@@ -25,7 +27,7 @@ class QualityController extends AbstractController
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function messControlAction()
+    public function messControlAction() : Response
     {
         return $this->renderResponse(
             'base/iframe.html.twig',
@@ -39,7 +41,7 @@ class QualityController extends AbstractController
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function docAction()
+    public function docAction() : Response
     {
         return $this->renderResponse(
             'base/fullpage-iframe.html.twig',
@@ -53,7 +55,7 @@ class QualityController extends AbstractController
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function testAction()
+    public function testAction() : Response
     {
         return $this->renderResponse(
             'base/iframe.html.twig',

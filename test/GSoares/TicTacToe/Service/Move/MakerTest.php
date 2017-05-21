@@ -25,7 +25,7 @@ class MakerTest extends TestCase
      */
     private $winnerVerifier;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->validator = $this->getMockBuilder('GSoares\TicTacToe\Service\Move\Validator')
             ->getMock();
@@ -54,7 +54,7 @@ class MakerTest extends TestCase
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->maker = null;
         $this->validator = null;
@@ -74,7 +74,7 @@ class MakerTest extends TestCase
         string $player,
         array $boardState,
         array $expectedPositions
-    ) {
+    ) : void {
         $this->winnerVerifier
             ->expects($this->any())
             ->method('verifyPosition')
@@ -89,7 +89,7 @@ class MakerTest extends TestCase
     /**
      * @return array
      */
-    public function validNextMovePositionsProvider()
+    public function validNextMovePositionsProvider() : array
     {
         return [
             [
@@ -140,7 +140,7 @@ class MakerTest extends TestCase
         string $bot,
         array $boardState,
         array $expectedPositions
-    ) {
+    ) : void {
         $this->winnerVerifier
             ->expects($this->atLeast(1))
             ->method('verifyPosition')
@@ -155,7 +155,7 @@ class MakerTest extends TestCase
     /**
      * @return array
      */
-    public function botMoveWillPredictWinnerMoveProvider()
+    public function botMoveWillPredictWinnerMoveProvider() : array
     {
         return [
             [
@@ -200,8 +200,11 @@ class MakerTest extends TestCase
      * @dataProvider playerMoveWillPredictWinnerMoveProvider
      * @test
      */
-    public function testPlayerMoveWillPredictWinnerMove(string $player, array $boardState, array $expectedPositions)
-    {
+    public function testPlayerMoveWillPredictWinnerMove(
+        string $player,
+        array $boardState,
+        array $expectedPositions
+    ) : void {
         $this->winnerVerifier
             ->expects($this->atLeast(1))
             ->method('verifyPosition')
@@ -255,7 +258,7 @@ class MakerTest extends TestCase
      * @param array $expectedPositions
      * @return callable
      */
-    private function simulateWinnerPositionVerifier(string $referenceUnit, array $expectedPositions)
+    private function simulateWinnerPositionVerifier(string $referenceUnit, array $expectedPositions) : callable
     {
         return function ($simulatedBoardState, $unit) use ($referenceUnit, $expectedPositions) {
             if ($unit == $referenceUnit) {

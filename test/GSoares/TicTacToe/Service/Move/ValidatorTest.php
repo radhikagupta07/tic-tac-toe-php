@@ -14,14 +14,14 @@ class ValidatorTest extends TestCase
      */
     private $validator;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->validator = new Validator();
 
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->validator = null;
 
@@ -33,7 +33,7 @@ class ValidatorTest extends TestCase
      * @expectedExceptionMessage Invalid playerUnit. Allowed O or X
      * @test
      */
-    public function testInvalidPlayerUnitMustThrowException()
+    public function testInvalidPlayerUnitMustThrowException() : void
     {
         $this->validator->validate([], 'Z');
     }
@@ -45,7 +45,7 @@ class ValidatorTest extends TestCase
      * @dataProvider invalidBoardLineCountProvider
      * @test
      */
-    public function testInvalidBoardLineCountMustThrowException(array $boardState)
+    public function testInvalidBoardLineCountMustThrowException(array $boardState) : void
     {
         $this->validator->validate($boardState, 'X');
     }
@@ -53,7 +53,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function invalidBoardLineCountProvider()
+    public function invalidBoardLineCountProvider() : array
     {
         return [
             [
@@ -80,7 +80,7 @@ class ValidatorTest extends TestCase
      * @expectedExceptionMessage You must provide a 3 positions line
      * @test
      */
-    public function testInvalidBoardNumberOfPositionsMustThrowException(array $boardState)
+    public function testInvalidBoardNumberOfPositionsMustThrowException(array $boardState) : void
     {
         $this->validator->validate($boardState, 'X');
     }
@@ -88,7 +88,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function invalidBoardNumberOfPositionsProvider()
+    public function invalidBoardNumberOfPositionsProvider() : array
     {
         return [
             [
@@ -115,7 +115,7 @@ class ValidatorTest extends TestCase
      * @expectedExceptionMessage There is some invalid board position value
      * @test
      */
-    public function testInvalidBoardPositionValueMustThrowException(array $boardState)
+    public function testInvalidBoardPositionValueMustThrowException(array $boardState) : void
     {
         $this->validator->validate($boardState, 'X');
     }
@@ -123,12 +123,12 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function invalidBoardPositionValueProvider()
+    public function invalidBoardPositionValueProvider() : array
     {
         return [
             [
                 [
-                    ['X', 'O', null],
+                    ['X', 'O', '    '],
                     ['X', 'O', 'O'],
                     ['O',  'X', 'X']
                 ]
@@ -137,7 +137,7 @@ class ValidatorTest extends TestCase
                 [
                     ['X', 'O', ''],
                     ['X', 'O', 'O'],
-                    ['O',  'X', new \stdClass()]
+                    ['O',  'X', 'Z']
                 ]
             ]
         ];
@@ -150,7 +150,7 @@ class ValidatorTest extends TestCase
      * @expectedExceptionMessage Invalid unit count equality
      * @test
      */
-    public function testInvalidBoardUnitCountMustThrowException(array $boardState)
+    public function testInvalidBoardUnitCountMustThrowException(array $boardState) : void
     {
         $this->validator->validate($boardState, 'X');
     }
@@ -158,7 +158,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function invalidBoardUnitCountProvider()
+    public function invalidBoardUnitCountProvider() : array
     {
         return [
             [
