@@ -24,5 +24,5 @@ interface MoveInterface
      * @param string $playerUnit Player unit representation
      * @return array
      */
-    public function makeMove($boardState, $playerUnit = 'X');
+    public function makeMove(array $boardState, string $playerUnit = 'X') : array;
 }

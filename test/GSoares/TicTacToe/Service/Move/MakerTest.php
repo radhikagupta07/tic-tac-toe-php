@@ -64,14 +64,17 @@ class MakerTest extends TestCase
     }
 
     /**
-     * @param $player
-     * @param $boardState
-     * @param $expectedPositions
+     * @param string $player
+     * @param array $boardState
+     * @param array $expectedPositions
      * @dataProvider validNextMovePositionsProvider
      * @test
      */
-    public function testMakeMoveWillReturnValidNextPosition($player, array $boardState, array $expectedPositions)
-    {
+    public function testMakeMoveWillReturnValidNextPosition(
+        string $player,
+        array $boardState,
+        array $expectedPositions
+    ) {
         $this->winnerVerifier
             ->expects($this->any())
             ->method('verifyPosition')
@@ -125,15 +128,19 @@ class MakerTest extends TestCase
     }
 
     /**
-     * @param $player
-     * @param $bot
+     * @param string $player
+     * @param string $bot
      * @param array $boardState
      * @param array $expectedPositions
      * @dataProvider botMoveWillPredictWinnerMoveProvider
      * @test
      */
-    public function testBotMoveWillPredictWinnerMove($player, $bot, array $boardState, array $expectedPositions)
-    {
+    public function testBotMoveWillPredictWinnerMove(
+        string $player,
+        string $bot,
+        array $boardState,
+        array $expectedPositions
+    ) {
         $this->winnerVerifier
             ->expects($this->atLeast(1))
             ->method('verifyPosition')
@@ -187,13 +194,13 @@ class MakerTest extends TestCase
     }
 
     /**
-     * @param $player
+     * @param string $player
      * @param array $boardState
      * @param array $expectedPositions
      * @dataProvider playerMoveWillPredictWinnerMoveProvider
      * @test
      */
-    public function testPlayerMoveWillPredictWinnerMove($player, array $boardState, array $expectedPositions)
+    public function testPlayerMoveWillPredictWinnerMove(string $player, array $boardState, array $expectedPositions)
     {
         $this->winnerVerifier
             ->expects($this->atLeast(1))
@@ -244,11 +251,11 @@ class MakerTest extends TestCase
     }
 
     /**
-     * @param $referenceUnit
+     * @param string $referenceUnit
      * @param array $expectedPositions
      * @return callable
      */
-    private function simulateWinnerPositionVerifier($referenceUnit, array $expectedPositions)
+    private function simulateWinnerPositionVerifier(string $referenceUnit, array $expectedPositions)
     {
         return function ($simulatedBoardState, $unit) use ($referenceUnit, $expectedPositions) {
             if ($unit == $referenceUnit) {

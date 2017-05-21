@@ -43,7 +43,7 @@ class Maker implements MoveInterface
      * @param string $playerUnit Player unit representation
      * @return array
      */
-    public function makeMove($boardState, $playerUnit = 'X')
+    public function makeMove(array $boardState, string $playerUnit = 'X') : array
     {
         $this->validator
             ->validate($boardState, $playerUnit);
@@ -53,18 +53,20 @@ class Maker implements MoveInterface
 
     /**
      * @param array $boardState
-     * @param $botUnit
+     * @param string $botUnit
      * @return array
      */
-    private function getNextPossibleMove(array $boardState, $botUnit)
+    private function getNextPossibleMove(array $boardState, string $botUnit) : array
     {
         $possibleMoves = $this->getPossibleMoves($boardState);
 
         if (!count($possibleMoves)) {
-            return null;
+            return [];
         }
 
-        if ($winnerNextMove = $this->predictWinnerNextMove($boardState, $possibleMoves, $botUnit)) {
+        $winnerNextMove = $this->predictWinnerNextMove($boardState, $possibleMoves, $botUnit);
+
+        if (count($winnerNextMove)) {
             return $winnerNextMove;
         }
 
@@ -74,23 +76,27 @@ class Maker implements MoveInterface
     /**
      * @param array $boardState
      * @param array $possibleMoves
-     * @param $botUnit
+     * @param string $botUnit
      * @return array
      */
-    private function predictWinnerNextMove(array $boardState, array $possibleMoves, $botUnit)
+    private function predictWinnerNextMove(array $boardState, array $possibleMoves, string $botUnit) : array
     {
         $playerUnit = $botUnit == 'X' ? 'O' : 'X';
-        $playerWinsMove = null;
+        $playerWinsMove = [];
 
         foreach ($possibleMoves as $possibleMove) {
             $possibleMoveX = $possibleMove[0];
             $possibleMoveY = $possibleMove[1];
 
-            if ($winnerMove = $this->getWinnerWinnerMove($boardState, $possibleMoveY, $possibleMoveX, $botUnit)) {
+            $winnerMove = $this->getWinnerWinnerMove($boardState, $possibleMoveY, $possibleMoveX, $botUnit);
+
+            if (count($winnerMove)) {
                 return $winnerMove;
             }
 
-            if ($winnerMove = $this->getWinnerWinnerMove($boardState, $possibleMoveY, $possibleMoveX, $playerUnit)) {
+            $winnerMove = $this->getWinnerWinnerMove($boardState, $possibleMoveY, $possibleMoveX, $playerUnit);
+
+            if (count($winnerMove)) {
                 $playerWinsMove = $winnerMove;
             }
         }
@@ -100,13 +106,17 @@ class Maker implements MoveInterface
 
     /**
      * @param array $boardState
-     * @param $possibleMoveY
-     * @param $possibleMoveX
-     * @param $unit
+     * @param string $possibleMoveY
+     * @param string $possibleMoveX
+     * @param string $unit
      * @return array
      */
-    private function getWinnerWinnerMove(array $boardState, $possibleMoveY, $possibleMoveX, $unit)
-    {
+    private function getWinnerWinnerMove(
+        array $boardState,
+        string $possibleMoveY,
+        string $possibleMoveX,
+        string $unit
+    ) : array {
         $simulatedBoardState = $boardState;
         $simulatedBoardState[$possibleMoveY][$possibleMoveX] = $unit;
 
@@ -120,13 +130,15 @@ class Maker implements MoveInterface
         if (count($winnerPosition)) {
             return [$possibleMoveX, $possibleMoveY];
         }
+
+        return [];
     }
 
     /**
      * @param array $boardState
      * @return array
      */
-    private function getPossibleMoves(array $boardState)
+    private function getPossibleMoves(array $boardState) : array
     {
         $possibleMoves = [];
 
@@ -145,7 +157,7 @@ class Maker implements MoveInterface
      * @param $playerUnit
      * @return string
      */
-    private function getBotByPlayer($playerUnit)
+    private function getBotByPlayer(string $playerUnit) : string
     {
         return $playerUnit == 'X' ? 'O' : 'X';
     }

@@ -84,7 +84,14 @@ class MakerTest extends TestCase
             ->with([], 'X')
             ->willReturn([]);
 
-        $expectedResponse = $this->fabricateResponse(null, false, false, true, [], []);
+        $expectedResponse = $this->fabricateResponse(
+            '',
+            false,
+            false,
+            true,
+            [],
+            []
+        );
 
         $this->assertEquals($expectedResponse, $this->makeMoveByRequest());
     }
@@ -113,7 +120,14 @@ class MakerTest extends TestCase
             ->with([], 'X')
             ->willReturn([]);
 
-        $expectedResponse = $this->fabricateResponse('O', false, true, false, $winnerPositions, []);
+        $expectedResponse = $this->fabricateResponse(
+            'O',
+            false,
+            true,
+            false,
+            $winnerPositions,
+            []
+        );
 
         $this->assertEquals($expectedResponse, $this->makeMoveByRequest());
     }
@@ -142,7 +156,14 @@ class MakerTest extends TestCase
             ->with([], 'X')
             ->willReturn([]);
 
-        $expectedResponse = $this->fabricateResponse('X', true, false, false, $winnerPositions, []);
+        $expectedResponse = $this->fabricateResponse(
+            'X',
+            true,
+            false,
+            false,
+            $winnerPositions,
+            []
+        );
 
         $this->assertEquals($expectedResponse, $this->makeMoveByRequest());
     }
@@ -169,7 +190,14 @@ class MakerTest extends TestCase
             ->with([], 'X')
             ->willReturn($nextMove = [0, 0, 'O']);
 
-        $expectedResponse = $this->fabricateResponse(null, false, false, false, [], $nextMove);
+        $expectedResponse = $this->fabricateResponse(
+            '',
+            false,
+            false,
+            false,
+            [],
+            $nextMove
+        );
 
         $this->assertEquals($expectedResponse, $this->makeMoveByRequest());
     }
@@ -190,7 +218,7 @@ class MakerTest extends TestCase
     /**
      * @return \stdClass
      */
-    private function createRequestObject()
+    private function createRequestObject() : \stdClass
     {
         $dto = new \stdClass();
         $dto->boardState = [];
@@ -202,22 +230,28 @@ class MakerTest extends TestCase
     /**
      * @return JsonResponse
      */
-    private function makeMoveByRequest()
+    private function makeMoveByRequest() : JsonResponse
     {
         return $this->maker->makeMoveByRequest(new Request());
     }
 
     /**
-     * @param $winner
-     * @param $playerWins
-     * @param $botWins
-     * @param $tieGame
+     * @param string $winner
+     * @param bool $playerWins
+     * @param bool $botWins
+     * @param bool $tieGame
      * @param $winnerPositions
      * @param $nextMove
      * @return JsonResponse
      */
-    private function fabricateResponse($winner, $playerWins, $botWins, $tieGame, $winnerPositions, $nextMove)
-    {
+    private function fabricateResponse(
+        string $winner,
+        bool $playerWins,
+        bool $botWins,
+        bool $tieGame,
+        array $winnerPositions,
+        array $nextMove
+    ) : JsonResponse {
         $responseDto = new GameResultDto();
         $responseDto->winner = $winner;
         $responseDto->playerWins = $playerWins;

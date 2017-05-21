@@ -5,7 +5,6 @@ namespace GSoares\TicTacToe\Application\Service\Move;
 use GSoares\TicTacToe\Application\Dto\GameResultDto;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use \GSoares\TicTacToe\Service\Move\Maker as MakerService;
 use \GSoares\TicTacToe\Service\Board\WinnerVerifier;
 
@@ -46,7 +45,7 @@ class Maker
      * @param Request $request
      * @return JsonResponse
      */
-    public function makeMoveByRequest(Request $request)
+    public function makeMoveByRequest(Request $request) : JsonResponse
     {
         try {
             $requestData = $this->validator
@@ -76,17 +75,17 @@ class Maker
 
     /**
      * @param array $winnerPosition
-     * @param $nextMove
+     * @param array $nextMove
      * @param $playerUnit
-     * @return \stdClass
+     * @return GameResultDto
      */
-    private function fabricateGameResult(array $winnerPosition, $nextMove, $playerUnit)
+    private function fabricateGameResult(array $winnerPosition, array $nextMove, string $playerUnit) : GameResultDto
     {
         $responseDto = new GameResultDto();
-        $responseDto->winner = isset($winnerPosition[3]) ? $winnerPosition[3] : null;
+        $responseDto->winner = isset($winnerPosition[3]) ? $winnerPosition[3] : '';
         $responseDto->playerWins = $responseDto->winner == $playerUnit;
         $responseDto->botWins = $responseDto->winner && $responseDto->winner != $playerUnit;
-        $responseDto->tiedGame = !$nextMove && !$responseDto->winner;
+        $responseDto->tiedGame = !count($nextMove) && !$responseDto->winner;
         $responseDto->winnerPositions = array_slice($winnerPosition, 0, 3);
         $responseDto->nextMove = $nextMove;
 
