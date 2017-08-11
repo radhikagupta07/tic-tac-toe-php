@@ -33,7 +33,7 @@ nano /etc/nginx/sites-available/tic-tac-toe.conf
 ### 3.2 Create the symbolic link
 
 ```
-ln -s /etc/nginx/sites-available/tic-tac-toe.conf /etc/nginx/sites-enabled/tic-tac-toe.con
+ln -s /etc/nginx/sites-available/tic-tac-toe.conf /etc/nginx/sites-enabled/tic-tac-toe.conf
 ```
 
 ### 3.3 Restart nginx
